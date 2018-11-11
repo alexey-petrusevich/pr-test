@@ -5,6 +5,7 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"strings"
 )
 
 const _READER_DELIMETER = '\n'
@@ -18,7 +19,10 @@ func WaitCommands(syncEntity *sync.SyncEntity) {
 		if err != nil {
 			syncEntity.Error(err)
 		}
-		fmt.Printf("Your input: %s\n", input)
+		commands := CommandFactory(strings.Trim(input, "\n"))
+		for i, cmd := range commands {
+			fmt.Printf("%i : %i\n", i, cmd.Execute(nil))
+		}
 	}
 	syncEntity.DoneExecuting()
 }
