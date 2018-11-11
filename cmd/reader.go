@@ -3,7 +3,6 @@ package cmd
 import (
 	"../sync"
 	"bufio"
-	"fmt"
 	"os"
 	"strings"
 )
@@ -20,8 +19,10 @@ func WaitCommands(syncEntity *sync.SyncEntity) {
 			syncEntity.Error(err)
 		}
 		commands := CommandFactory(strings.Trim(input, "\n"))
-		for i, cmd := range commands {
-			fmt.Printf("%i : %i\n", i, cmd.Execute(nil))
+		var prevResult interface{}
+		for _, cmd := range commands {
+			prevResult = cmd.Execute(prevResult)
+			//fmt.Printf("%i : %i\n", i, cmd.Execute(nil))
 		}
 	}
 	syncEntity.DoneExecuting()

@@ -29,6 +29,7 @@ func (command *Command) Execute(prevResult interface{}) (result interface{}) {
 func (command *Command) Init(cmd string, position int, params []string) {
 	command.Command = cmd
 	command.Position = position
+	command.Params = params
 }
 
 func CommandFactory(input string) []Executable {
@@ -69,6 +70,8 @@ func getCommand(commandToken string) Executable {
 		command = new(CMD_RG)
 	case CMD_READ_ONE:
 		command = new(CMD_RO)
+	case CMD_EXIT_EXEC:
+		command = new(CMD_EXIT)
 	}
 	return command
 }

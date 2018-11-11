@@ -3,6 +3,7 @@ package main
 import (
 	"./cmd"
 	"./sync"
+	"fmt"
 )
 
 //func main() {
@@ -18,6 +19,8 @@ import (
 //}
 
 func main() {
+	// example command
+	fmt.Println("ro=./example_data/1.bin exit")
 	syncEntity := sync.GetSyncEntity(1)
 	cmd.WaitCommands(syncEntity)
 	syncEntity.WaitAll()

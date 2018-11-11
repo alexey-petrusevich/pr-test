@@ -1,7 +1,7 @@
 package cmd
 
 // Exit from cmd
-const CMD_EXIT = "exit"
+const CMD_EXIT_EXEC = "exit"
 
 // Read .txt file with group of signals
 const CMD_READ_GROUP = "rg"

@@ -1,8 +1,8 @@
 package analyze
 
 type Signal struct {
-	metaData     *MetaData
-	binaryPoints *BinaryPoints
+	MetaData *MetaData
+	Points   []float32
 }
 
 // .bin file metadata
@@ -24,5 +24,5 @@ type MetaData struct {
 
 // .bin file points
 type BinaryPoints struct {
-	points []float32 // TODO: 32?
+	// TODO: 32?
 }
