@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"fmt"
 	"os"
 )
 
@@ -11,7 +10,6 @@ type CMD_EXIT struct {
 }
 
 func (command *CMD_EXIT) Execute(prevResult interface{}) (result interface{}) {
-	fmt.Println(prevResult)
 	os.Exit(100)
 	return nil
 }
