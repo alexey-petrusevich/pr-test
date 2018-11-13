@@ -1,6 +1,7 @@
 package analyze
 
 type Signal struct {
+	Name     string
 	MetaData *MetaData
 	Points   []float32
 }
