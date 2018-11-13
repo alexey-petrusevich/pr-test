@@ -24,8 +24,10 @@ func (command *CMD_RG) Execute(prevResult interface{}) (result interface{}) {
 			signal := *getSignal(sigPath)
 			signals = append(signals, signal)
 		}
+		commandResult := make(map[string]interface{})
+		commandResult[_RESULT_SIG] = signals
 		// return slice with signals
-		return signals
+		return commandResult
 	} else {
 		return nil
 	}

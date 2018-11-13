@@ -29,8 +29,10 @@ func (command *CMD_RO) Execute(prevResult interface{}) (result interface{}) {
 		path := command.Command.Params[0]
 		var signals []analyze.Signal
 		signals = append(signals, *getSignal(path))
+		commandResult := make(map[string]interface{})
+		commandResult[_RESULT_SIG] = signals
 		// return slice with signals
-		return signals
+		return commandResult
 	} else {
 		return nil
 	}
@@ -48,6 +50,7 @@ func getSignal(path string) *analyze.Signal {
 	}
 	defer file.Close()
 	sig := new(analyze.Signal)
+	sig.Name = path
 	sig.MetaData = readMetaData(file)
 	points := readDataPoints(file)
 	for _, point := range points {

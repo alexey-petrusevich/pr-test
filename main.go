@@ -19,8 +19,10 @@ import (
 //}
 
 func main() {
-	// example command
+	// example commands
 	fmt.Println("ro=./example_data/1.bin exit")
+	fmt.Println("rg=./example_data/text.txt exit")
+	fmt.Println("ro=./example_data/1.bin save=wav exit")
 	syncEntity := sync.GetSyncEntity(1)
 	cmd.WaitCommands(syncEntity)
 	syncEntity.WaitAll()

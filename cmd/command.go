@@ -15,6 +15,12 @@ type Executable interface {
 	Execute(prevResult interface{}) (result interface{})
 }
 
+const _RESULT_SIG = "sig"
+
+type CommandResult struct {
+	Results map[string]interface{}
+}
+
 type Command struct {
 	Command  string
 	Position int
@@ -72,6 +78,8 @@ func getCommand(commandToken string) Executable {
 		command = new(CMD_RO)
 	case CMD_EXIT_EXEC:
 		command = new(CMD_EXIT)
+	case CMD_SAVE_RESULT:
+		command = new(CMD_SAVE)
 	}
 	return command
 }
