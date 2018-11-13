@@ -3,8 +3,10 @@ package cmd
 import (
 	"../analyze"
 	"bufio"
+	"encoding/binary"
 	"io"
 	"log"
+	"math"
 	"os"
 )
 
@@ -68,7 +70,7 @@ func readDataPoints(file *os.File) (points []float32) {
 	for !isReaded {
 		bytes := readN(reader, _FLOAT_32_SIZE)
 		if bytes != nil {
-			point := float32(read_int32(bytes))
+			point := float32(read_float32(bytes))
 			points = append(points, point)
 		} else {
 			isReaded = true
@@ -94,6 +96,12 @@ func readMetaData(file *os.File) (metaData *analyze.MetaData) {
 	metaData.MaxValue = float32(read_int32(readN(reader, _FLOAT_32_SIZE)))
 	metaData.MinValue = float32(read_int32(readN(reader, _FLOAT_32_SIZE)))
 	return metaData
+}
+
+func read_float32(data []byte) float32 {
+	bits := binary.LittleEndian.Uint32(data)
+	float := math.Float32frombits(bits)
+	return float
 }
 
 func read_int32(data []byte) int32 {

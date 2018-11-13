@@ -1,6 +1,8 @@
 package analyze
 
-import "math"
+import (
+	"math"
+)
 
 type SignalParameters struct {
 	MaxValue          float32
@@ -11,12 +13,12 @@ type SignalParameters struct {
 	PeakFactor        float32
 }
 
-func CalculateSignalParameters(signal *Signal) (parameters *SignalParameters) {
+func CalculateSignalParameters(signal *Signal, selectionSize int) (parameters *SignalParameters) {
 	parameters = new(SignalParameters)
 	points := signal.Points
 	parameters.MinValue = points[0]
 	parameters.MaxValue = points[0]
-	for i := 0; i < len(signal.Points); i++ {
+	for i := 0; i < selectionSize && i < len(signal.Points); i++ {
 		if parameters.MinValue > points[i] {
 			parameters.MinValue = points[i]
 		}
@@ -24,19 +26,25 @@ func CalculateSignalParameters(signal *Signal) (parameters *SignalParameters) {
 			parameters.MaxValue = points[i]
 		}
 	}
-	parameters.Scope = parameters.MaxValue - parameters.MinValue
-	for _, point := range points {
-		parameters.Constant += point
-	}
-	parameters.Constant = parameters.Constant / float32(len(points))
 
-	for _, point := range points {
-		parameters.StandardDeviation += point * point
+	parameters.Scope = parameters.MaxValue - parameters.MinValue
+
+	for i := 0; i < selectionSize && i < len(signal.Points); i++ {
+		parameters.Constant += points[i]
 	}
-	a := float64(parameters.StandardDeviation / float32(len(points)))
+
+	parameters.Constant /= float32(selectionSize)
+
+	for i := 0; i < selectionSize && i < len(signal.Points); i++ {
+		parameters.StandardDeviation += points[i] * points[i]
+	}
+
+	a := float64(parameters.StandardDeviation / float32(selectionSize))
 	parameters.StandardDeviation = float32(math.Sqrt(a))
 
-	parameters.PeakFactor = max(parameters.MaxValue, parameters.MinValue) / parameters.StandardDeviation
+	maxAbs := math.Abs(float64(parameters.MaxValue))
+	minAbs := math.Abs(float64(parameters.MinValue))
+	parameters.PeakFactor = float32(math.Max(maxAbs, minAbs)) / parameters.StandardDeviation
 
 	return parameters
 }

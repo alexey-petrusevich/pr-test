@@ -8,7 +8,7 @@ import (
 
 const (
 	DEFAULT_CHANNELS = 1     // 1
-	DEFAULT_BITS     = 32    // Tone is lower when value is lower (8, 16, 32, 64 ...)
+	DEFAULT_BITS     = 8     // Tone is lower when value is lower (8, 16, 32, 64 ...)
 	DEFAULT_RATE     = 44100 // 44100 32768
 
 	DEFAULT_OUT_PATH = "./"
@@ -34,9 +34,11 @@ func WriteWAVByMeta(name string, soundLength int, signal []float32, meta wav.Fil
 
 	for n := 0; n < soundLength; n++ {
 		for idx := range signal {
+			// TODO umnozhat na 100 luchshe ne nado, a to perdit silno ochen
 			funRes := int32(
-				signal[idx],
+				signal[idx] * 100,
 			)
+			println(funRes)
 			writer.WriteInt32(funRes)
 		}
 		checkErr(err)

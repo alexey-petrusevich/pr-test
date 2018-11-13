@@ -80,6 +80,8 @@ func getCommand(commandToken string) Executable {
 		command = new(CMD_EXIT)
 	case CMD_SAVE_RESULT:
 		command = new(CMD_SAVE)
+	case CMD_CALCULATE_PARAMS:
+		command = new(CMD_CP)
 	}
 	return command
 }
