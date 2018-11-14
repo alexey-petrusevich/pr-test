@@ -14,7 +14,7 @@ const (
 	DEFAULT_OUT_PATH = "./"
 )
 
-func WriteWAVForSignal(name string, soundLength int, signal []float32) {
+func WriteWAVForSignal(name string, soundLength int, signal []float64) {
 	meta := wav.File{
 		Channels:        DEFAULT_CHANNELS,
 		SampleRate:      DEFAULT_RATE,
@@ -23,7 +23,7 @@ func WriteWAVForSignal(name string, soundLength int, signal []float32) {
 	WriteWAVByMeta(name, soundLength, signal, meta)
 }
 
-func WriteWAVByMeta(name string, soundLength int, signal []float32, meta wav.File) {
+func WriteWAVByMeta(name string, soundLength int, signal []float64, meta wav.File) {
 	wavOut, err := os.Create(DEFAULT_OUT_PATH + name + ".wav")
 	checkErr(err)
 	defer wavOut.Close()
@@ -36,9 +36,9 @@ func WriteWAVByMeta(name string, soundLength int, signal []float32, meta wav.Fil
 		for idx := range signal {
 			// TODO umnozhat na 100 luchshe ne nado, a to perdit silno ochen
 			funRes := int32(
-				signal[idx] * 100,
+				signal[idx] * 1000,
 			)
-			println(funRes)
+			//println(funRes)
 			writer.WriteInt32(funRes)
 		}
 		checkErr(err)

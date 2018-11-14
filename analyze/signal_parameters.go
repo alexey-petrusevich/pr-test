@@ -1,16 +1,18 @@
 package analyze
 
 import (
+	"golang.org/x/exp/errors/fmt"
 	"math"
+	"strings"
 )
 
 type SignalParameters struct {
-	MaxValue          float32
-	MinValue          float32
-	Scope             float32
-	Constant          float32
-	StandardDeviation float32
-	PeakFactor        float32
+	MaxValue          float64
+	MinValue          float64
+	Scope             float64
+	Constant          float64
+	StandardDeviation float64
+	PeakFactor        float64
 }
 
 func CalculateSignalParameters(signal *Signal, selectionSize int) (parameters *SignalParameters) {
@@ -33,26 +35,44 @@ func CalculateSignalParameters(signal *Signal, selectionSize int) (parameters *S
 		parameters.Constant += points[i]
 	}
 
-	parameters.Constant /= float32(selectionSize)
+	parameters.Constant /= float64(selectionSize)
 
 	for i := 0; i < selectionSize && i < len(signal.Points); i++ {
 		parameters.StandardDeviation += points[i] * points[i]
 	}
 
-	a := float64(parameters.StandardDeviation / float32(selectionSize))
-	parameters.StandardDeviation = float32(math.Sqrt(a))
+	a := float64(parameters.StandardDeviation / float64(selectionSize))
+	parameters.StandardDeviation = float64(math.Sqrt(a))
 
-	maxAbs := math.Abs(float64(parameters.MaxValue))
-	minAbs := math.Abs(float64(parameters.MinValue))
-	parameters.PeakFactor = float32(math.Max(maxAbs, minAbs)) / parameters.StandardDeviation
-
+	parameters.PeakFactor = float64(math.Max(parameters.MaxValue, parameters.MinValue)) / parameters.StandardDeviation
+	println(parameters)
 	return parameters
 }
 
-func max(a, b float32) float32 {
-	if a >= b {
-		return a
-	} else {
-		return b
-	}
+func (params *SignalParameters) String() string {
+	builder := new(strings.Builder)
+	builder.WriteString("MaxValue: ")
+	builder.WriteString(fmt.Sprint(params.MaxValue))
+	builder.WriteString("\n")
+
+	builder.WriteString("MinValue: ")
+	builder.WriteString(fmt.Sprint(params.MinValue))
+	builder.WriteString("\n")
+
+	builder.WriteString("Scope: ")
+	builder.WriteString(fmt.Sprint(params.Scope))
+	builder.WriteString("\n")
+
+	builder.WriteString("Constant: ")
+	builder.WriteString(fmt.Sprint(params.Constant))
+	builder.WriteString("\n")
+
+	builder.WriteString("Standard deviation: ")
+	builder.WriteString(fmt.Sprint(params.StandardDeviation))
+	builder.WriteString("\n")
+
+	builder.WriteString("Peak-factor: ")
+	builder.WriteString(fmt.Sprint(params.PeakFactor))
+	builder.WriteString("\n")
+	return builder.String()
 }

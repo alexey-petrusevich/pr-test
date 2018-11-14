@@ -61,7 +61,7 @@ func getSignal(path string) *analyze.Signal {
 	return sig
 }
 
-func readDataPoints(file *os.File) (points []float32) {
+func readDataPoints(file *os.File) (points []float64) {
 	reader := bufio.NewReader(file)
 	// Seek to offset
 	readN(reader, _DATA_OFFSET)
@@ -70,7 +70,7 @@ func readDataPoints(file *os.File) (points []float32) {
 	for !isReaded {
 		bytes := readN(reader, _FLOAT_32_SIZE)
 		if bytes != nil {
-			point := float32(read_float32(bytes))
+			point := read_float32(bytes)
 			points = append(points, point)
 		} else {
 			isReaded = true
@@ -87,21 +87,21 @@ func readMetaData(file *os.File) (metaData *analyze.MetaData) {
 	metaData.ChannelSize = int32(read_int32(readN(reader, _INT_32_SIZE)))
 	metaData.SpectrumLineNumber = int32(read_int32(readN(reader, _INT_32_SIZE)))
 	metaData.CutoffFrequency = int32(read_int32(readN(reader, _INT_32_SIZE)))
-	metaData.FrequencyDefinition = float32(read_int32(readN(reader, _FLOAT_32_SIZE)))
-	metaData.DataBlockReceiveTime = float32(read_int32(readN(reader, _FLOAT_32_SIZE)))
+	metaData.FrequencyDefinition = read_float32(readN(reader, _FLOAT_32_SIZE))
+	metaData.DataBlockReceiveTime = read_float32(readN(reader, _FLOAT_32_SIZE))
 	metaData.TotalReceiveTime = int32(read_int32(readN(reader, _INT_32_SIZE)))
 	metaData.DataBlockNumber = int32(read_int32(readN(reader, _INT_32_SIZE)))
 	metaData.DataSize = int32(read_int32(readN(reader, _INT_32_SIZE)))
 	metaData.ReceivedBlocksNumber = int32(read_int32(readN(reader, _INT_32_SIZE)))
-	metaData.MaxValue = float32(read_int32(readN(reader, _FLOAT_32_SIZE)))
-	metaData.MinValue = float32(read_int32(readN(reader, _FLOAT_32_SIZE)))
+	metaData.MinValue = read_float32(readN(reader, _FLOAT_32_SIZE))
+	metaData.MaxValue = read_float32(readN(reader, _FLOAT_32_SIZE))
 	return metaData
 }
 
-func read_float32(data []byte) float32 {
+func read_float32(data []byte) float64 {
 	bits := binary.LittleEndian.Uint32(data)
 	float := math.Float32frombits(bits)
-	return float
+	return float64(float)
 }
 
 func read_int32(data []byte) int32 {
