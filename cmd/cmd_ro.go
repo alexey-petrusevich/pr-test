@@ -52,7 +52,7 @@ func getSignal(path string) *analyze.Signal {
 	}
 	defer file.Close()
 	sig := new(analyze.Signal)
-	sig.Name = path
+	sig.Name = createSignalName(file)
 	sig.MetaData = readMetaData(file)
 	points := readDataPoints(file)
 	for _, point := range points {
@@ -117,4 +117,9 @@ func readN(reader *bufio.Reader, n int) (result []byte) {
 		result = append(result, byte)
 	}
 	return result
+}
+
+// .bs here, it's flag that this signal it's a base
+func createSignalName(file *os.File) string {
+	return file.Name() + ".bs"
 }

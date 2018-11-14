@@ -24,7 +24,7 @@ func WriteWAVForSignal(name string, soundLength int, signal []float64) {
 }
 
 func WriteWAVByMeta(name string, soundLength int, signal []float64, meta wav.File) {
-	wavOut, err := os.Create(DEFAULT_OUT_PATH + name + ".wav")
+	wavOut, err := os.Create(name + ".wav")
 	checkErr(err)
 	defer wavOut.Close()
 

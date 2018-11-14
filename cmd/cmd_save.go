@@ -3,7 +3,6 @@ package cmd
 import (
 	"../analyze"
 	"../wav"
-	"strconv"
 )
 
 type CMD_SAVE struct {
@@ -35,8 +34,8 @@ func saveByParam(saveType string, commandResult map[string]interface{}) {
 func saveWav(commandResult map[string]interface{}) {
 	// TODO Save only signals?
 	signals := commandResult[_RESULT_SIG].([]analyze.Signal)
-	for index, signal := range signals {
+	for _, signal := range signals {
 		data := signal.Points
-		wav.WriteWAVForSignal(strconv.Itoa(index)+_RESULT_SIG, 1, data)
+		wav.WriteWAVForSignal(signal.Name, 1, data)
 	}
 }
