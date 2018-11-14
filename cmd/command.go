@@ -82,6 +82,8 @@ func getCommand(commandToken string) Executable {
 		command = new(CMD_SAVE)
 	case CMD_CALCULATE_PARAMS:
 		command = new(CMD_CP)
+	case CMD_PROCESS_SPECTRUM:
+		command = new(CMD_SPECTRUM)
 	}
 	return command
 }

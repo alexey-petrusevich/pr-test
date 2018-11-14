@@ -14,3 +14,5 @@ const CMD_SAVE_RESULT = "save"
 
 // Calculate signal parameters
 const CMD_CALCULATE_PARAMS = "cp"
+
+const CMD_PROCESS_SPECTRUM = "spectrum"

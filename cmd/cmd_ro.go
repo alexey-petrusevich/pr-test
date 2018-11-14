@@ -12,6 +12,8 @@ import (
 
 const (
 	_DATA_OFFSET = 4 * 13
+	// .bs here, it's flag that signal it's a base
+	_BASE_SIGNAL_POSTFIX = ".bs"
 )
 
 // METADATA constants
@@ -119,7 +121,6 @@ func readN(reader *bufio.Reader, n int) (result []byte) {
 	return result
 }
 
-// .bs here, it's flag that this signal it's a base
 func createSignalName(file *os.File) string {
-	return file.Name() + ".bs"
+	return file.Name() + _BASE_SIGNAL_POSTFIX
 }
