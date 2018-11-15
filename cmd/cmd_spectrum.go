@@ -4,6 +4,8 @@ import (
 	"../analyze"
 )
 
+const _SPECTRUM_POSTFIX = "-spectrum"
+
 type CMD_SPECTRUM struct {
 	Executable
 	*Command
@@ -14,7 +16,8 @@ func (command *CMD_SPECTRUM) Execute(prevResult interface{}) (result interface{}
 	// TODO analyze other signals
 	signals := commandResult[_RESULT_SIG].([]analyze.Signal)
 	for _, signal := range signals {
-		analyze.CalculateSignalSpectrum(&signal)
+		spectrum := analyze.CalculateSignalSpectrum(&signal)
+		commandResult[signal.Name+_SPECTRUM_POSTFIX] = spectrum
 	}
 	return prevResult
 }

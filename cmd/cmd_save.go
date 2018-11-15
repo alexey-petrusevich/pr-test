@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"../analyze"
+	"../plot"
 	"../wav"
 )
 
@@ -28,6 +29,16 @@ func saveByParam(saveType string, commandResult map[string]interface{}) {
 	switch saveType {
 	case "wav":
 		saveWav(commandResult)
+	case "spectrum":
+		saveSpectrum(commandResult)
+	}
+}
+func saveSpectrum(commandResult map[string]interface{}) {
+	signals := commandResult[_RESULT_SIG].([]analyze.Signal)
+	for _, signal := range signals {
+		signalSpectrumKey := signal.Name + _SPECTRUM_POSTFIX
+		spectrum := commandResult[signalSpectrumKey].(map[int]float64)
+		plot.SaveSpectrum(signalSpectrumKey, spectrum, signal.MetaData.ChannelSize)
 	}
 }
 
