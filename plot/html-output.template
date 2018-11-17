@@ -11,7 +11,7 @@
             zoomType: 'x'
         },
         title: {
-            text: title
+            text: 'Title'
         },
         subtitle: {
             text: document.ontouchstart === undefined ?
@@ -58,7 +58,7 @@
         series: [{
             type: 'area',
             name: 'series',
-            data: data
+            data: %%data
         }]
     });
 </script>

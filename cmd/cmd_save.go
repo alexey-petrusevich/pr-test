@@ -31,8 +31,25 @@ func saveByParam(saveType string, commandResult map[string]interface{}) {
 		saveWav(commandResult)
 	case "spectrum":
 		saveSpectrum(commandResult)
+		//case "html":
+		//	saveDataToHtml(commandResult)
 	}
 }
+
+func saveDataToHtml(commandResult map[string]interface{}) {
+	signals := commandResult[_RESULT_SIG].([]analyze.Signal)
+	for _, signal := range signals {
+		signalSpectrumKey := signal.Name + _SPECTRUM_POSTFIX
+		spectrum := commandResult[signalSpectrumKey].(map[int]float64)
+		var newMap map[float64]float64
+		newMap = make(map[float64]float64)
+		for key, value := range spectrum {
+			newMap[float64(key)] = value
+		}
+		plot.SaveDataToHtml(newMap, "x", "y", signal.Name)
+	}
+}
+
 func saveSpectrum(commandResult map[string]interface{}) {
 	signals := commandResult[_RESULT_SIG].([]analyze.Signal)
 	for _, signal := range signals {
@@ -40,6 +57,8 @@ func saveSpectrum(commandResult map[string]interface{}) {
 		spectrum := commandResult[signalSpectrumKey].(map[int]float64)
 		plot.SaveSpectrum(signalSpectrumKey, spectrum, signal.MetaData.ChannelSize)
 	}
+	// Save spectrum to html
+	saveDataToHtml(commandResult)
 }
 
 func saveWav(commandResult map[string]interface{}) {
