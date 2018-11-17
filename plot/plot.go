@@ -25,12 +25,11 @@ func SaveDataToHtml(data map[float64]float64, xName, yName, signalName string) {
 		dataString += getPointLikeArray(key, data[key])
 	}
 
-	//for key, value := range data {
-	//	dataString += getPointLikeArray(key, value)
-	//}
 	dataString = "[" + dataString + "]"
 	page := getFileDataAsString("./plot/html-output.template")
 	output := strings.Replace(page, "%%data", dataString, -1)
+	output = strings.Replace(output, "%%xName", "'"+xName+"'", -1)
+	output = strings.Replace(output, "%%yName", "'"+yName+"'", -1)
 	file, err := os.Create(signalName + ".html")
 	if err != nil {
 		panic(err)

@@ -31,23 +31,11 @@ func saveByParam(saveType string, commandResult map[string]interface{}) {
 		saveWav(commandResult)
 	case "spectrum":
 		saveSpectrum(commandResult)
-		//case "html":
-		//	saveDataToHtml(commandResult)
 	}
 }
 
-func saveDataToHtml(commandResult map[string]interface{}) {
-	signals := commandResult[_RESULT_SIG].([]analyze.Signal)
-	for _, signal := range signals {
-		signalSpectrumKey := signal.Name + _SPECTRUM_POSTFIX
-		spectrum := commandResult[signalSpectrumKey].(map[int]float64)
-		var newMap map[float64]float64
-		newMap = make(map[float64]float64)
-		for key, value := range spectrum {
-			newMap[float64(key)] = value
-		}
-		plot.SaveDataToHtml(newMap, "x", "y", signal.Name)
-	}
+func saveDataToHtml(xys map[float64]float64, xName, yName, title string) {
+	plot.SaveDataToHtml(xys, xName, yName, title)
 }
 
 func saveSpectrum(commandResult map[string]interface{}) {
@@ -56,9 +44,10 @@ func saveSpectrum(commandResult map[string]interface{}) {
 		signalSpectrumKey := signal.Name + _SPECTRUM_POSTFIX
 		spectrum := commandResult[signalSpectrumKey].(map[int]float64)
 		plot.SaveSpectrum(signalSpectrumKey, spectrum, signal.MetaData.ChannelSize)
+
+		newMap := translateMap(spectrum)
+		saveDataToHtml(newMap, "Amp", "Freq", signal.Name)
 	}
-	// Save spectrum to html
-	saveDataToHtml(commandResult)
 }
 
 func saveWav(commandResult map[string]interface{}) {
@@ -68,4 +57,12 @@ func saveWav(commandResult map[string]interface{}) {
 		data := signal.Points
 		wav.WriteWAVForSignal(signal.Name, 1, data)
 	}
+}
+
+func translateMap(oldMap map[int]float64) (newMap map[float64]float64) {
+	newMap = make(map[float64]float64)
+	for key, value := range oldMap {
+		newMap[float64(key)] = value
+	}
+	return newMap
 }

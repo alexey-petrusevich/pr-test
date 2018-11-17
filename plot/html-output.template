@@ -22,7 +22,7 @@
         },
         yAxis: {
             title: {
-                text: 'Value'
+                text: %%yName
             }
         },
         legend: {
